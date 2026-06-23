@@ -68,12 +68,7 @@
 </div>
 
 <script>
-    // PWA Service Worker Registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered'));
-    }
-
+   
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     const body = document.getElementById('app-body');
