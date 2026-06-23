@@ -3,36 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="manifest.json">
-    
     <title>Matrix 3D Mainframe</title>
-   <style>
+    <style>
         body { 
             margin: 0; background: #000; height: 100vh; overflow: hidden; 
             font-family: 'Courier New', monospace; touch-action: none; 
-            overscroll-behavior: none; 
         }
         
         #app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
         
-        /* Increased canvas height from 60vh to 70vh to push UI up */
-        #matrix-canvas { flex: 0 0 70vh; display: block; background: #000; box-shadow: inset 0 0 20px #0f0; }
+        /* Set to 50vh to move the panel up */
+        #matrix-canvas { flex: 0 0 50vh; display: block; background: #000; box-shadow: inset 0 0 20px #0f0; }
         
         #menu-ui { 
             flex: 1; background: #050505; display: flex; flex-direction: column; 
-            padding: 20px; padding-bottom: 20px; gap: 10px; /* Reduced padding for tighter layout */
-            border-top: 2px solid #0f0; box-shadow: 0 -5px 15px rgba(0,255,0,0.2);
-            color: #0f0; position: relative;
+            padding: 10px 20px; gap: 10px; 
+            border-top: 2px solid #0f0; color: #0f0; position: relative;
         }
 
         #ad-container { 
             position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
             width: 120px; height: 60px; border: 1px solid #0f0; 
-            box-shadow: 0 0 10px #0f0; display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .controls-wrapper { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
@@ -40,34 +32,16 @@
         
         .color-selector { display: flex; gap: 10px; }
         .color-btn { 
-            padding: 8px 12px; border: 1px solid #0f0; cursor: pointer; 
-            background: transparent; color: #0f0; font-weight: bold; 
-            transition: 0.3s; opacity: 0.3; 
+            padding: 5px 10px; border: 1px solid #0f0; cursor: pointer; 
+            background: transparent; color: #0f0; opacity: 0.3; 
         }
-        .color-btn.active { opacity: 1; box-shadow: 0 0 15px #0f0; background: #0f0; color: #000; }
+        .color-btn.active { opacity: 1; background: #0f0; color: #000; }
 
-        #speed-slider { 
-            width: 100px; accent-color: #0f0; cursor: pointer; 
-            filter: drop-shadow(0 0 5px #0f0);
-        }
-
+        #speed-slider { width: 100px; accent-color: #0f0; }
         #engage-btn { 
-            align-self: center;
-            background: transparent; color: #0f0; padding: 8px 24px; 
-            border: 1px solid #0f0; font-weight: bold; cursor: pointer; 
-            box-shadow: 0 0 10px #0f0; text-transform: uppercase;
+            align-self: center; background: transparent; color: #0f0; padding: 5px 20px; 
+            border: 1px solid #0f0; cursor: pointer; text-transform: uppercase;
         }
-        #engage-btn:hover { background: #0f0; color: #000; }
-
-        .screensaver-mode #menu-ui { display: none; }
-        .screensaver-mode #matrix-canvas { flex: 0 0 100vh; }
-
-        #screensaver-close {
-            display: none; position: fixed; bottom: 10px; right: 15px;
-            color: #333; cursor: pointer; z-index: 9999;
-            font-size: 20px; font-weight: bold;
-        }
-        .screensaver-mode #screensaver-close { display: block; }
     </style>
 </head>
 <body id="app-body">
@@ -86,22 +60,26 @@
             </div>
             <div id="engage-btn">Full Screen</div>
         </div>
-
         <div id="ad-container">
-            <div id="frame" style="width: 120px;margin: auto;z-index: 99998;height: auto">
-                <iframe data-aa='2445356' src='//ad.a-ads.com/2445356/?size=120x60'
-                        style='border:0; padding:0; width:120px; height:60px; overflow:hidden;display: block;margin: auto'></iframe>
-            </div>
+            <iframe data-aa='2445356' src='//ad.a-ads.com/2445356/?size=120x60' style='border:0; width:120px; height:60px; overflow:hidden;'></iframe>
         </div>
     </div>
 </div>
-
 <div id="screensaver-close">X</div>
 
 <script>
-    const canvas = document.getElementById('matrix-canvas');
+   const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     const body = document.getElementById('app-body');
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        // Use 0.5 to match the 50vh CSS height
+        canvas.height = body.classList.contains('screensaver-mode') ? window.innerHeight : window.innerHeight * 0.5;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
     const engageBtn = document.getElementById('engage-btn');
     const speedSlider = document.getElementById('speed-slider');
     
